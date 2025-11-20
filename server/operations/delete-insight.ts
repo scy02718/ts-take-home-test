@@ -13,16 +13,20 @@ export default (input: Input): boolean => {
   }
 
   try {
-    console.log(`Deleting insight id=${id}`);
+    console.log(`Deleting insight id=${input.id}`);
 
-    db.sql`DELETE FROM insights WHERE id = ${id}`;
+    // Check if the row exists first
+    const [existing] = db
+      .sql`SELECT id FROM insights WHERE id = ${input.id} LIMIT 1`;
 
-    // Confirm deletion
-    const [row] = db.sql`SELECT id FROM insights WHERE id = ${id} LIMIT 1`;
-    const success = !row;
+    if (!existing) {
+      console.log("Delete failed: insight does not exist");
+      return false; // nothing to delete
+    }
 
-    console.log(`Delete successful: ${success}`);
-    return success;
+    input.db.exec(`DELETE FROM insights WHERE id = ${input.id}`);
+    console.log("Delete successful");
+    return true;
   } catch (err) {
     console.error(`Error deleting insight id=${id}:`, err);
     return false;

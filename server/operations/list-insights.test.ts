@@ -1,3 +1,4 @@
+// deno-lint-ignore-file no-import-prefix no-unversioned-import
 import { expect } from "jsr:@std/expect";
 import { beforeAll, describe, it } from "jsr:@std/testing/bdd";
 import type { Insight } from "$models/insight.ts";
